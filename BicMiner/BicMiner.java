@@ -12,8 +12,10 @@ import java.util.List;
 import org.tribot.api.General;
 import org.tribot.api.Timing;
 import org.tribot.api.util.abc.ABCUtil;
+import org.tribot.api2007.Objects;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.types.RSModel;
+import org.tribot.api2007.types.RSObject;
 import org.tribot.script.Script;
 import org.tribot.script.ScriptManifest;
 import org.tribot.script.interfaces.MessageListening07;
@@ -21,6 +23,9 @@ import org.tribot.script.interfaces.Painting;
 
 import scripts.BicMiner.Node;
 import scripts.BicMiner.Actions.*;
+import scripts.BicMiner.Utils.Constants;
+import scripts.BicMiner.Utils.Utils;
+import scripts.BicMiner.Utils.Variables;
 
 
 @ScriptManifest(authors = { "Bic" }, category = "Mining", name = "Bic Miner", version = 1.00, description = "Mines ore in the motherlode mine.", gameMode = 1)
@@ -29,8 +34,6 @@ public class BicMiner extends Script implements Painting, MessageListening07 {
 	public static ABCUtil abc = new ABCUtil();
 	private final List<Node> nodes = new ArrayList<>();
 	
-	public static String status = "";
-	public static String lastMessage = "";
 	private static final long startTime = System.currentTimeMillis();
     Font font = new Font("Verdana", Font.BOLD, 12);
 	 
@@ -39,9 +42,8 @@ public class BicMiner extends Script implements Painting, MessageListening07 {
 		Collections.addAll(nodes, new Bank(), new CleanOre(), new FixStrut(), new Mine(), new Navigate());
 		
 		General.println("Bic's Miner has started!");
-		
-		// Walk to Ore veins, mine ore till full, walk to filter,
-		// fill hopper, fix struts if needed, empty sack, bank
+
+		//while(true){General.sleep(75,125);}
 		
 		loop(20, 40);
 	}
@@ -62,7 +64,7 @@ public class BicMiner extends Script implements Painting, MessageListening07 {
 	public void serverMessageReceived(String arg0) {
 		// TODO Auto-generate method sub
 		if (arg0.contains("Some ore is ready"))
-			lastMessage = "ready";
+			 Variables.lastMessage = "ready";
 		
 		
 	}
@@ -71,14 +73,22 @@ public class BicMiner extends Script implements Painting, MessageListening07 {
 	public void onPaint(Graphics g) {
 		long timeRan = System.currentTimeMillis() - startTime;
 		
-		Player.getRSPlayer().getModel().getCentrePoint().getX();
+		Point pModel = Player.getRSPlayer().getModel().getCentrePoint();
+		RSObject[] struts = Objects.findNearest(15, Constants.STRUT_ID);
 		
 		g.setFont(font);
 	    g.setColor(Color.WHITE);
 	    g.drawString("Bic's Miner", 279, 360);
 	    g.drawString("Run time: " + Timing.msToString(timeRan), 279, 375);
-	    g.drawString("Status: " + status, 279, 390);
-	    g.drawString("Mining", (int)Player.getRSPlayer().getModel().getCentrePoint().getX(), (int)Player.getRSPlayer().getModel().getCentrePoint().getY());
+	    g.drawString("Status: " + Variables.status, 279, 390);
+	    
+	    if (Variables.isMining)
+	    	g.drawString("Mining", (int)pModel.getX(), (int)pModel.getY());
+	    
+	    
+	    for (int i = 0; i < struts.length; i++){
+	    	g.drawString("BROKEN", (int)struts[i].getModel().getCentrePoint().getX(), (int)struts[i].getModel().getCentrePoint().getY());
+	    }
 	       
 
 	}

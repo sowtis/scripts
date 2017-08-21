@@ -12,12 +12,14 @@ import scripts.BicMiner.Node;
 import scripts.BicMiner.Utils.AntiBan;
 import scripts.BicMiner.Utils.Constants;
 import scripts.BicMiner.Utils.Utils;
+import scripts.BicMiner.Utils.Variables;
 
 public class Mine extends Node {
 	
 	@Override
 	public void execute() {
-		BicMiner.status = "Mining";
+		
+		Variables.status = "Mining";
 		
 		if (Player.getAnimation() == -1){
 			if (DynamicClicking.clickRSObject(Utils.getOreVein(), "Mine")){
@@ -32,18 +34,19 @@ public class Mine extends Node {
 					
 				}, General.random(1200, 2300));
 				
-
-				AntiBan.generateTrackers(10000, false);
+				Variables.isMining = true;
+				AntiBan.generateTrackers(6500, false);
 				
-				Timing.waitCondition(new Condition(){
-
-					@Override
-					public boolean active() {
-						General.sleep(100,150);
-						return Player.getAnimation() == -1;
-					}
+				long mineTimer = System.currentTimeMillis() + 2000;
+				
+				while (mineTimer > System.currentTimeMillis()){
+					if (Utils.isMining())
+						mineTimer = System.currentTimeMillis() + 1100;
 					
-				}, General.randomLong(10000, 15000));
+					General.sleep(50,75);
+				}
+				
+				Variables.isMining = false;
 				
 				AntiBan.getReactionTime();
 				AntiBan.sleepReactionTime();

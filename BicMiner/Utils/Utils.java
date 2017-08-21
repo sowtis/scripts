@@ -9,7 +9,7 @@ import org.tribot.api2007.Player;
 import org.tribot.api2007.types.RSObject;
 
 public class Utils {
-	
+
 	public static boolean hasDirt(){
 		if (Inventory.find(Constants.DIRT_ID).length > 0)
 			return true;
@@ -51,6 +51,16 @@ public class Utils {
 		return null;
 	}
 	
+	public static RSObject getHopper(){
+		RSObject[] hopper = Objects.findNearest(12, Constants.HOPPER_ID);
+		
+		if (hopper.length > 0){
+			return hopper[0];
+		}
+		
+		return null;
+	}
+	
 	public static RSObject getOreVein(){
 		RSObject[] oreVein = Objects.findNearest(10, Constants.ORE);
 		
@@ -59,14 +69,31 @@ public class Utils {
 	
 	public static boolean isMining(){
 		
-		if (Player.getAnimation() != 6752){
-			long mineTimer = System.currentTimeMillis();
-			while(System.currentTimeMillis() - mineTimer < 1300){
-				General.sleep(50,75);
-			}
-			return false;
+		if (Player.getAnimation() == 6752){
+			Variables.isMining = true;
+			return true;
 		}
 		
-		return true;
+		return false;
+	}
+	
+	public static int strutsBroken(){
+		RSObject[] struts = Objects.findNearest(20, Constants.STRUT_ID);
+		
+		return struts.length;
+	}
+	
+	public static RSObject getStrut(){
+		RSObject[] struts = Objects.findNearest(20,  Constants.STRUT_ID);
+		
+		if (struts.length > 0){
+			return struts[0];
+		}
+		
+		return null;
+	}
+	
+	public static boolean hasHammer(){
+		return Inventory.find("Hammer").length > 0;
 	}
 }

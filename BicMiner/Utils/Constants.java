@@ -43,5 +43,8 @@ public class Constants {
 		};
 
 	public static final int MINING_ANIMATION = 6752;
+
+	public static final RSArea STRUT_AREA =
+			new RSArea(new RSTile(3741, 5670, 0), new RSTile(3742, 5662, 0));
 	
 }

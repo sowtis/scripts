@@ -21,7 +21,7 @@ public class Navigate extends Node {
 	@Override
 	public void execute() {
 		
-		BicMiner.status = "Walking";
+		Variables.status = "Walking";
 		
 		if (Utils.isInMineArea()){
 			
@@ -40,12 +40,14 @@ public class Navigate extends Node {
 					RSObject rockfall = Utils.getRock();
 					
 					if (DynamicClicking.clickRSObject(rockfall, "Mine")){
+						
+						
 						Timing.waitCondition(new Condition(){
 
 							@Override
 							public boolean active() {
 								General.sleep(100,150);
-								return Player.getAnimation() == -1 && !Player.isMoving();
+								return !Utils.rockInWay();
 							}
 							
 						}, General.random(3500, 5000));
