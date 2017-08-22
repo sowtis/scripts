@@ -1,9 +1,10 @@
-package scripts;
+package scripts.BicHamAlch;
 
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.tribot.api.General;
@@ -13,10 +14,12 @@ import org.tribot.script.Script;
 import org.tribot.script.ScriptManifest;
 import org.tribot.script.interfaces.Painting;
 
-import scripts.Node;
+import scripts.BicHamAlch.Node;
+import scripts.BicHamAlch.Utils.AntiBan;
+import scripts.BicHamAlch.Actions.*;
 
-@ScriptManifest (authors = {"Bic"}, category = "Template", name = "Template")
-public class Template extends Script implements Painting {
+@ScriptManifest (authors = {"Bic"}, category = "Money Making", name = "Bic's Ham Alcher")
+public class BicHamAlch extends Script implements Painting {
 	
 	public static ABCUtil abc = new ABCUtil();
 	private final List<Node> nodes = new ArrayList<>();
@@ -27,7 +30,8 @@ public class Template extends Script implements Painting {
 	 
 	@Override
 	public void run() {
-		//Collections.addAll(nodes, new Class(), new Class());
+		Collections.addAll(nodes, new Alch(), new Bank(), new DropJunk(),
+							new LootChest(), new Pickpocket(), new Walk());
 		loop(20, 40);
 	}
 
