@@ -5,6 +5,10 @@ import org.tribot.api2007.types.RSTile;
 
 public class Constants {
 	
+	// Animations
+	
+	public static final int HAMMER_ANIM = 12;
+	
 	// Items
 	
 	public static final int DIRT_ID = 12011;

@@ -17,8 +17,26 @@ public class Bank extends Node {
 	public void execute() {
 		Variables.status = "Banking";
 		
+		if (walkToBank()){
+			if (openBank()){
+				General.sleep(350,750);
+				deposit();
+			}
+		}
+		
+	}
+
+	@Override
+	public boolean validate() {
+		return Utils.emptySpaces() < 9 && !Utils.hasDirt();
+	}
+	
+	private boolean walkToBank(){
+		
 		if (!Utils.getChest().isOnScreen()){
+			
 			if (WebWalking.walkTo(Constants.BANK_AREA.getRandomTile())){
+				
 				Timing.waitCondition(new Condition(){
 
 					@Override
@@ -30,13 +48,20 @@ public class Bank extends Node {
 			}
 		}
 		
+		return true;
+	}
+	
+	private boolean openBank(){
+		
 		if (!Banking.isBankScreenOpen()){
+			
 			if (Banking.openBank()){
+				
 				Timing.waitCondition(new Condition(){
 	
 					@Override
 					public boolean active() {
-						// TODO Auto-generated method stub
+						General.sleep(100,150);
 						return Banking.isBankScreenOpen();
 					}
 					
@@ -44,6 +69,10 @@ public class Bank extends Node {
 			}
 		}
 		
+		return true;
+	}
+	
+	private boolean deposit(){
 		Banking.depositAll();
 		
 		Timing.waitCondition(new Condition(){
@@ -56,12 +85,7 @@ public class Bank extends Node {
 				
 		}, General.random(1500, 3500));
 		
-		
-		
+		return true;
 	}
-
-	@Override
-	public boolean validate() {
-		return Utils.emptySpaces() < 9 && !Utils.hasDirt();
-	}
+	
 }

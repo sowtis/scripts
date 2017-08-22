@@ -1,22 +1,19 @@
 package scripts.BicMiner.Utils;
 
-import scripts.BicMiner.BicMiner;
 import scripts.BicMiner.Utils.Constants;
 
 import org.tribot.api.General;
+import org.tribot.api2007.Camera;
 import org.tribot.api2007.Inventory;
 import org.tribot.api2007.Objects;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.types.RSObject;
 
 public class Utils {
-
-	public static boolean hasDirt(){
-		if (Inventory.find(Constants.DIRT_ID).length > 0)
-			return true;
-			
-		return false;
-	}
+	
+	// *********
+	// INVENTORY
+	// *********
 	
 	public static boolean inventoryFull(){
 		return Inventory.isFull();
@@ -26,21 +23,45 @@ public class Utils {
 		return 28 - Inventory.getAll().length;
 	}
 	
+	public static boolean hasHammer(){
+		return Inventory.find("Hammer").length > 0;
+	}
+	
+	public static boolean hasDirt(){
+		if (Inventory.find(Constants.DIRT_ID).length > 0)
+			return true;
+			
+		return false;
+	}
+	
+	// ********
+	// LOCATION
+	// ********
+	
 	public static boolean isInMineArea(){
 		return Constants.MINE_AREA[0].contains(Player.getPosition());
 	}
 	
-	public static boolean rockInWay(){
-		RSObject[] rockfall = Objects.find(7, Constants.ROCK);
+	public static boolean isNearChest(){
+		RSObject chest = getChest();
+		if (chest == null)
+			return false;
 		
-		for (int i =0; i < rockfall.length; i++){
-			if (Constants.ROCK_AREA.contains(rockfall[i].getPosition()))
-				return true;
-		}
-		
-		return false;
+		return chest.isOnScreen();
 	}
 	
+	public static boolean isNearHopper() {
+		RSObject hopper = getHopper();
+		if (hopper == null)
+			return false;
+		
+		return hopper.isOnScreen();
+	}
+	
+	// **********
+	// GET OBJECT
+	// **********
+
 	public static RSObject getChest() {
 		RSObject[] chest = Objects.find(15, Constants.BANK_ID);
 		
@@ -51,15 +72,8 @@ public class Utils {
 		return null;
 	}
 	
-	public static boolean isNearChest(){
-		if (getChest() == null)
-			return false;
-		
-		return getChest().isOnScreen();
-	}
-
 	public static RSObject getRock() {
-		RSObject[] rockfall = Objects.find(7, Constants.ROCK);
+		RSObject[] rockfall = Objects.find(6, Constants.ROCK);
 		
 		for (int i =0; i < rockfall.length; i++){
 			if (Constants.ROCK_AREA.contains(rockfall[i].getPosition()))
@@ -89,28 +103,9 @@ public class Utils {
 		
 		return null;
 	}
-	
-	public static boolean isMining(){
-		
-		if (Player.getAnimation() == 6752){
-			BicMiner.mineTimer = System.currentTimeMillis() + 1450;
-			return true;
-		}
-		
-		if (BicMiner.mineTimer > System.currentTimeMillis())
-			return true;
-		
-		return false;
-	}
-	
-	public static int strutsBroken(){
-		RSObject[] struts = Objects.findNearest(20, Constants.STRUT_ID);
-		
-		return struts.length;
-	}
-	
+
 	public static RSObject getStrut(){
-		RSObject[] struts = Objects.findNearest(20,  Constants.STRUT_ID);
+		RSObject[] struts = Objects.findNearest(20, Constants.STRUT_ID);
 		
 		if (struts.length > 0){
 			return struts[0];
@@ -119,7 +114,99 @@ public class Utils {
 		return null;
 	}
 	
-	public static boolean hasHammer(){
-		return Inventory.find("Hammer").length > 0;
+	public static RSObject getSack(){
+		RSObject[] sack = Objects.findNearest(15, Constants.SACK_ID);
+		
+		if (sack.length > 0)
+			return sack[0];
+		
+		return null;
 	}
+	
+	// *****
+	// OTHER 
+	// *****
+	
+	public static void turnCam(String direction){
+		switch (direction){
+		case "n":
+			if (General.random(1,2) == 1){
+				Camera.setCameraRotation(General.random(0, 43));
+			} else {
+				Camera.setCameraRotation(General.random(316, 360));
+			}
+			break;
+		case "e":
+			Camera.setCameraRotation(General.random(225, 315));
+			break;
+		case "s":
+			Camera.setCameraRotation(General.random(134, 224));
+			break;
+		case "w":
+			Camera.setCameraRotation(General.random(43, 133));
+			break;
+		default:
+			break;
+		}
+		
+	}
+	
+	public static String getOreDirection(RSObject ore){
+
+		if (ore.getOrientation() == 1)
+			return "west";
+		if (ore.getOrientation() == 2)
+			return "north";
+		if (ore.getOrientation() == 4)
+			return "east";
+		
+		return "south";
+	}
+	
+	public static String getCamDirection(){
+		if (Camera.getCameraRotation() < 45 || Camera.getCameraRotation() > 315)
+			return "north";
+		
+		if (Camera.getCameraRotation() > 225)
+			return "east";
+		
+		if (Camera.getCameraRotation() > 135)
+			return "south";
+		
+		return "west";
+	}
+
+	public static boolean rockInWay(){
+		RSObject[] rockfall = Objects.find(6, Constants.ROCK);
+		
+		int rocks = 0;
+		
+		for (int i =0; i < rockfall.length; i++){
+			if (Constants.ROCK_AREA.contains(rockfall[i].getPosition()))
+				rocks++;
+		}
+		// If 2 rocks are in ROCK_AREA, then a rock is in the way and must be mined
+		if (rocks > 1)
+			return true;
+		
+		return false;
+	}
+
+	public static int strutsBroken(){
+		RSObject[] struts = Objects.findNearest(20, Constants.STRUT_ID);
+		
+		return struts.length;
+	}
+	
+	public static boolean isMining(){
+		if (Player.getAnimation() == Constants.MINING_ANIMATION || Variables.isMining == true){
+			Variables.isMining = true;
+			return true;
+		}
+		
+		return false;
+	}
+
+	
+
 }

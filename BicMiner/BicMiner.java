@@ -3,7 +3,6 @@ package scripts.BicMiner;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,7 +13,6 @@ import org.tribot.api.Timing;
 import org.tribot.api.util.abc.ABCUtil;
 import org.tribot.api2007.Objects;
 import org.tribot.api2007.Player;
-import org.tribot.api2007.types.RSModel;
 import org.tribot.api2007.types.RSObject;
 import org.tribot.script.Script;
 import org.tribot.script.ScriptManifest;
@@ -23,6 +21,7 @@ import org.tribot.script.interfaces.Painting;
 
 import scripts.BicMiner.Node;
 import scripts.BicMiner.Actions.*;
+import scripts.BicMiner.Utils.AntiBan;
 import scripts.BicMiner.Utils.Constants;
 import scripts.BicMiner.Utils.Utils;
 import scripts.BicMiner.Utils.Variables;
@@ -40,7 +39,7 @@ public class BicMiner extends Script implements Painting, MessageListening07 {
 	 
 	@Override
 	public void run() {
-		Collections.addAll(nodes, new Bank(), new CleanOre(), new FixStrut(), new Mine(), new Navigate());
+		Collections.addAll(nodes, new Bank(), new CleanOre(), new Mine(), new Navigate());
 		
 		General.println("Bic's Miner has started!");
 
@@ -48,6 +47,9 @@ public class BicMiner extends Script implements Painting, MessageListening07 {
 		
 		loop(20, 40);
 	}
+	
+
+	
 
 	private void loop(int min, int max) {
 		while (true) {
@@ -67,7 +69,6 @@ public class BicMiner extends Script implements Painting, MessageListening07 {
 		if (arg0.contains("Some ore is ready"))
 			 Variables.lastMessage = "ready";
 		
-		
 	}
 	
 	@Override
@@ -82,9 +83,10 @@ public class BicMiner extends Script implements Painting, MessageListening07 {
 	    g.drawString("Bic's Miner", 279, 360);
 	    g.drawString("Run time: " + Timing.msToString(timeRan), 279, 375);
 	    g.drawString("Status: " + Variables.status, 279, 390);
+	    g.drawString("ABC: " + AntiBan.abcActions, 279, 405);
 	    
 	    if (Utils.isMining())
-	    	g.drawString("Mining", (int)pModel.getX(), (int)pModel.getY());
+	    	g.drawString("Mining", (int)pModel.getX()-15, (int)pModel.getY());
 	    
 	    
 	    for (int i = 0; i < struts.length; i++){

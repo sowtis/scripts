@@ -3,10 +3,8 @@ package scripts.BicMiner.Utils;
 import org.tribot.api.Clicking;
 import org.tribot.api.General;
 import org.tribot.api.Timing;
-import org.tribot.api.input.Mouse;
 import org.tribot.api.interfaces.Clickable;
 import org.tribot.api.interfaces.Positionable;
-import org.tribot.api.types.generic.Filter;
 import org.tribot.api.util.abc.ABCProperties;
 import org.tribot.api.util.abc.ABCUtil;
 import org.tribot.api.util.abc.preferences.OpenBankPreference;
@@ -14,21 +12,7 @@ import org.tribot.api.util.abc.preferences.WalkingPreference;
 import org.tribot.api2007.Combat;
 import org.tribot.api2007.Game;
 import org.tribot.api2007.Inventory;
-import org.tribot.api2007.NPCs;
 import org.tribot.api2007.Options;
-import org.tribot.api2007.Player;
-import org.tribot.api2007.Players;
-import org.tribot.api2007.Walking;
-import org.tribot.api2007.ext.Filters.Items;
-import org.tribot.api2007.ext.Filters.Objects;
-import org.tribot.api2007.types.RSCharacter;
-import org.tribot.api2007.types.RSItem;
-import org.tribot.api2007.types.RSNPC;
-import org.tribot.api2007.types.RSNPCDefinition;
-import org.tribot.api2007.types.RSObject;
-import org.tribot.api2007.types.RSObjectDefinition;
-import org.tribot.api2007.types.RSPlayer;
-import org.tribot.api2007.types.RSTile;
 
 /**
  * The AntiBan class provides an easy way to implement Anti-ban Compliance 2.0
