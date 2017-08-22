@@ -69,11 +69,62 @@ public class Navigate extends Node {
 			}
 			
 		}
+		
+		if (Utils.isNearChest()){
+			if (WebWalking.walkTo(Constants.ROCK_AREA.getRandomTile())){
+				
+				Timing.waitCondition(new Condition(){
+
+					@Override
+					public boolean active() {
+						General.sleep(100, 150);
+						return Constants.ROCK_AREA.getRandomTile().distanceTo(Player.getPosition()) < 5;
+					}
+					
+				}, General.random(5000,  7500));
+				
+				if (Utils.rockInWay()){
+					RSObject rockfall = Utils.getRock();
+					
+					if (DynamicClicking.clickRSObject(rockfall, "Mine")){
+						
+						
+						Timing.waitCondition(new Condition(){
+
+							@Override
+							public boolean active() {
+								General.sleep(100,150);
+								return !Utils.rockInWay();
+							}
+							
+						}, General.random(3500, 5000));
+					}
+				}
+				
+				if (WebWalking.walkTo(Constants.MINE_AREA[0].getRandomTile())){
+					Timing.waitCondition(new Condition(){
+
+						@Override
+						public boolean active() {
+							General.sleep(100,150);
+							return Utils.isInMineArea();
+						}
+						
+					}, General.randomLong(3500, 5000));
+				}
+				
+				
+				
+			}
+			
+			
+		}
 	}
 
 	@Override
 	public boolean validate() {
-		return Utils.isInMineArea() && Utils.inventoryFull() && Utils.hasDirt();
+		return (Utils.isInMineArea() && Utils.inventoryFull() && Utils.hasDirt()) || 
+			   (Utils.isNearChest() && Utils.emptySpaces() == 28);
 	}
 	
 }

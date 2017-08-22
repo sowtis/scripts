@@ -1,5 +1,6 @@
 package scripts.BicMiner.Utils;
 
+import scripts.BicMiner.BicMiner;
 import scripts.BicMiner.Utils.Constants;
 
 import org.tribot.api.General;
@@ -21,7 +22,7 @@ public class Utils {
 		return Inventory.isFull();
 	}
 
-	public int emptySpaces() {
+	public static int emptySpaces() {
 		return 28 - Inventory.getAll().length;
 	}
 	
@@ -38,6 +39,23 @@ public class Utils {
 		}
 		
 		return false;
+	}
+	
+	public static RSObject getChest() {
+		RSObject[] chest = Objects.find(15, Constants.BANK_ID);
+		
+		if (chest.length > 0){
+			return chest[0];
+		}
+		
+		return null;
+	}
+	
+	public static boolean isNearChest(){
+		if (getChest() == null)
+			return false;
+		
+		return getChest().isOnScreen();
 	}
 
 	public static RSObject getRock() {
@@ -64,15 +82,23 @@ public class Utils {
 	public static RSObject getOreVein(){
 		RSObject[] oreVein = Objects.findNearest(10, Constants.ORE);
 		
-		return AntiBan.selectNextTarget(oreVein);
+		for (int i = 0; i < oreVein.length; i++){
+			if (Constants.MINE_AREA[0].contains(oreVein[i].getPosition()))
+				return oreVein[i];
+		}
+		
+		return null;
 	}
 	
 	public static boolean isMining(){
 		
 		if (Player.getAnimation() == 6752){
-			Variables.isMining = true;
+			BicMiner.mineTimer = System.currentTimeMillis() + 1450;
 			return true;
 		}
+		
+		if (BicMiner.mineTimer > System.currentTimeMillis())
+			return true;
 		
 		return false;
 	}

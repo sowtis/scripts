@@ -21,6 +21,7 @@ public class Mine extends Node {
 		
 		Variables.status = "Mining";
 		
+		
 		if (Player.getAnimation() == -1){
 			if (DynamicClicking.clickRSObject(Utils.getOreVein(), "Mine")){
 				
@@ -29,29 +30,35 @@ public class Mine extends Node {
 					@Override
 					public boolean active() {
 						General.sleep(100,150);
-						return Player.getAnimation() == Constants.MINING_ANIMATION;
+						return Player.getAnimation() == 6752;
 					}
 					
 				}, General.random(1200, 2300));
-				
-				Variables.isMining = true;
-				AntiBan.generateTrackers(6500, false);
-				
-				long mineTimer = System.currentTimeMillis() + 2000;
-				
-				while (mineTimer > System.currentTimeMillis()){
-					if (Utils.isMining())
-						mineTimer = System.currentTimeMillis() + 1100;
-					
-					General.sleep(50,75);
-				}
-				
-				Variables.isMining = false;
-				
-				AntiBan.getReactionTime();
-				AntiBan.sleepReactionTime();
 			}
 		}
+		
+		AntiBan.generateTrackers(6500, false);
+		
+		if (Player.getAnimation() == 6752){
+			
+			long mineTimer = System.currentTimeMillis() + 1450;
+			
+			while (mineTimer > System.currentTimeMillis()){
+				if (Player.getAnimation() == 6752)
+					mineTimer = System.currentTimeMillis() + 1450;
+				
+				General.sleep(100,150);
+				AntiBan.timedActions();
+			}
+			
+			Variables.isMining = false;
+			General.println("ABC sleep: " + AntiBan.getReactionTime());;
+			AntiBan.sleepReactionTime();
+		}
+		
+
+		
+		
 	}
 
 	@Override

@@ -47,4 +47,7 @@ public class Constants {
 	public static final RSArea STRUT_AREA =
 			new RSArea(new RSTile(3741, 5670, 0), new RSTile(3742, 5662, 0));
 	
+	public static final RSArea BANK_AREA = 
+			new RSArea(new RSTile(3758, 5667, 0), new RSTile(3760, 5665, 0));
+	
 }

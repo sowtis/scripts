@@ -35,6 +35,7 @@ public class BicMiner extends Script implements Painting, MessageListening07 {
 	private final List<Node> nodes = new ArrayList<>();
 	
 	private static final long startTime = System.currentTimeMillis();
+    public static long mineTimer;
     Font font = new Font("Verdana", Font.BOLD, 12);
 	 
 	@Override
@@ -82,7 +83,7 @@ public class BicMiner extends Script implements Painting, MessageListening07 {
 	    g.drawString("Run time: " + Timing.msToString(timeRan), 279, 375);
 	    g.drawString("Status: " + Variables.status, 279, 390);
 	    
-	    if (Variables.isMining)
+	    if (Utils.isMining())
 	    	g.drawString("Mining", (int)pModel.getX(), (int)pModel.getY());
 	    
 	    
