@@ -27,13 +27,25 @@ public class Constants {
 	public static final RSArea PICKPOCKET_AREA =
 			new RSArea(new RSTile(0,0,0), new RSTile(0,0,0));
 	
-	public static final RSArea[] ROOMS = 
+	public static final RSArea[] ROOM_AREA = 
 		{	new RSArea(new RSTile(0,0,0), new RSTile(0,0,0)),
 			new RSArea(new RSTile(0,0,0), new RSTile(0,0,0)),
 			new RSArea(new RSTile(0,0,0), new RSTile(0,0,0)),
 			new RSArea(new RSTile(0,0,0), new RSTile(0,0,0))	};
 	
+	public static final RSArea[] DOOR_AREA = 
+		{	new RSArea(new RSTile(0,0,0), new RSTile(0,0,0)),
+			new RSArea(new RSTile(0,0,0), new RSTile(0,0,0)),
+			new RSArea(new RSTile(0,0,0), new RSTile(0,0,0)),
+			new RSArea(new RSTile(0,0,0), new RSTile(0,0,0)),	};
+	
 	public static final RSArea GAME_AREA = 
+			new RSArea(new RSTile(0,0,0), new RSTile(0,0,0));
+	
+	public static final RSArea BANK_AREA =
+			new RSArea(new RSTile(0,0,0), new RSTile(0,0,0));
+	
+	public static final RSArea CASTLE_AREA = 
 			new RSArea(new RSTile(0,0,0), new RSTile(0,0,0));
 	
 	
@@ -46,6 +58,7 @@ public class Constants {
 		{	1, 2, 3, 4	};
 	
 	public static final int GUARD = 0;
+
 	
 	// ANIMATIONS
 	
