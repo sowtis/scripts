@@ -106,6 +106,13 @@ public class Utils {
 		return false;
 	}
 	
+	public static boolean isInCrackRoom() {
+		if (Constants.ROOM_AREA[0].contains(Player.getPosition()))
+			return true;			
+		
+		return false;
+	}
+	
 	public static boolean isInBank(){
 		if (Constants.BANK_AREA.contains(Player.getPosition()))
 			return true;
@@ -134,10 +141,12 @@ public class Utils {
 	}
 	
 	public static RSObject getDoor(int x){
-		RSObject[] door = Objects.find(20, Constants.DOORS[x]);
+		RSObject[] door = Objects.find(30, Constants.DOORS[x]);
 		
-		if (door.length > 0)
-			return door[0];
+		for (int i = 0; i < door.length; i++){
+			if (Constants.ROOM_AREA[x].contains(door[i].getPosition()))
+				return door[i];
+		}
 
 		return null;
 	}
@@ -170,19 +179,18 @@ public class Utils {
 	
 	public static boolean isStunned(){
 		
-		long stunTimer = 0;
-		
 		if (Variables.lastMessage == "stun"){
-			stunTimer = System.currentTimeMillis() + General.random(3550, 4250);
+			Variables.stunTimer = System.currentTimeMillis() + General.random(3150, 3950);
 			Variables.lastMessage = "";
 			return true;
 		}
 		
-		if (stunTimer > System.currentTimeMillis())
+		if (Variables.stunTimer > System.currentTimeMillis())
 			return true;
 		
 		return false;
 	}
+
 
 	
 	

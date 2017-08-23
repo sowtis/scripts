@@ -23,11 +23,22 @@ public class Alch extends Node {
 		Variables.status = "Alching";
 		
 		if (openMagic()){
-			if (selectSpell()){
-				if (alchItem()){
+			
+
+			for (int i = 0; i < Constants.JEWELRY.length; i++) {
+				if (Inventory.find(Constants.JEWELRY[i]).length > 0){
+					
+					if (selectSpell()){
+						if (alchItem(i)){
+							
+						}
+					}
 					
 				}
 			}
+			
+			
+
 		}
 		
 	}
@@ -55,12 +66,12 @@ public class Alch extends Node {
 	}
 	
 	private boolean selectSpell() {
-		if (Magic.selectSpell("High alchemy")){
+		if (Magic.selectSpell("High Level Alchemy")){
 			Timing.waitCondition(new Condition(){
 
 				@Override
 				public boolean active() {
-					return Magic.getSelectedSpellName().equals("High alchemy");
+					return Magic.getSelectedSpellName().equals("High Level Alchemy");
 				}
 				
 			}, General.random(350, 750));
@@ -68,24 +79,19 @@ public class Alch extends Node {
 		return true;
 	}
 
-	private boolean alchItem() {
-		for (RSItem item : Inventory.getAll()){
-			for (int i = 0; i < Constants.JEWELRY.length; i++){
-				if (item.name == Constants.JEWELRY[i]){
-					if (Clicking.click(item)){
-						Timing.waitCondition(new Condition(){
+	private boolean alchItem(int x) {
+		if (Clicking.click(Inventory.find(Constants.JEWELRY[x]))){
+			Timing.waitCondition(new Condition(){
 
-							@Override
-							public boolean active() {
-								return Player.getAnimation() == 1234;
-							}
-							
-						}, General.random(350, 750));
-					}
+				@Override
+				public boolean active() {
+					return GameTab.getOpen().equals(TABS.MAGIC);
 				}
-			}
 				
+			}, General.random(3000,5000));
 		}
+		
+		General.sleep(150,450);
 		
 		return true;
 	}

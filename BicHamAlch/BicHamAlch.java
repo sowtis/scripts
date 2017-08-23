@@ -10,6 +10,8 @@ import java.util.List;
 import org.tribot.api.General;
 import org.tribot.api.Timing;
 import org.tribot.api.util.abc.ABCUtil;
+import org.tribot.api2007.Objects;
+import org.tribot.api2007.types.RSObject;
 import org.tribot.script.Script;
 import org.tribot.script.ScriptManifest;
 import org.tribot.script.interfaces.MessageListening07;
@@ -36,6 +38,7 @@ public class BicHamAlch extends Script implements Painting, MessageListening07 {
 	public void run() {
 		Collections.addAll(nodes, new Alch(), new Bank(), new DropJunk(), new Eat(),
 							new LootChest(), new Pickpocket(), new Walk());
+		//while (true){			sleep(5000);		}
 		loop(20, 40);
 	}
 
@@ -65,7 +68,7 @@ public class BicHamAlch extends Script implements Painting, MessageListening07 {
 
 	@Override
 	public void serverMessageReceived(String arg0) {
-		if (arg0.contains("stun"))
+		if (arg0.contains("You've"))
 			Variables.lastMessage = "stun";
 		
 	}

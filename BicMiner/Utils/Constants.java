@@ -8,6 +8,7 @@ public class Constants {
 	// Animations
 	
 	public static final int HAMMER_ANIM = 12;
+	public static final int MINING_ANIMATION = 6752;
 	
 	// Items
 	
@@ -29,6 +30,12 @@ public class Constants {
 	public static final int BANK_ID = 26707;
 	
 	// Tiles
+	
+	public static final RSTile[] TEST =
+		{
+			new RSTile(0,0,0),	
+			new RSTile(0,0,0)
+		};
 
 	public static final RSArea HOPPER_AREA =
 			new RSArea(new RSTile(3747, 5674, 0), new RSTile(3752, 5670, 0));
@@ -46,7 +53,6 @@ public class Constants {
 			new RSArea(new RSTile(3712, 5632, 0), new RSTile(3723, 5649, 0))
 		};
 
-	public static final int MINING_ANIMATION = 6752;
 
 	public static final RSArea STRUT_AREA =
 			new RSArea(new RSTile(3741, 5670, 0), new RSTile(3742, 5662, 0));

@@ -20,9 +20,12 @@ public class Navigate extends Node {
 		Variables.status = "Walking";
 		
 		if (Utils.isInMineArea()){
+			if (Utils.getCamDirection() != "north"){
+				Utils.turnCam("n");
+			}
 			if (walkRock()){
 				if (breakRock()){
-					if (walkMineArea()){
+					if (walkHopperArea()){
 						
 					}
 				}
@@ -32,7 +35,7 @@ public class Navigate extends Node {
 		if (Utils.isNearChest()){
 			if (walkRock()){
 				if (breakRock()){
-					if (walkHopperArea()){
+					if (walkMineArea()){
 						
 					}
 				}

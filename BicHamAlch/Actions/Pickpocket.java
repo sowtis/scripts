@@ -41,7 +41,7 @@ public class Pickpocket extends Node {
 
 	private boolean pickpocket() {
 		if (DynamicClicking.clickRSNPC(Utils.getGuard(), "Pickpocket")){
-			General.sleep(450,850);
+			General.sleep(90,250);
 		}
 		
 		return false;

@@ -4,10 +4,13 @@ import org.tribot.api.DynamicClicking;
 import org.tribot.api.General;
 import org.tribot.api.Timing;
 import org.tribot.api.types.generic.Condition;
+import org.tribot.api2007.Player;
+import org.tribot.api2007.Walking;
 import org.tribot.api2007.WebWalking;
 import org.tribot.api2007.types.RSObject;
 
 import scripts.BicHamAlch.Node;
+import scripts.BicHamAlch.Utils.AntiBan;
 import scripts.BicHamAlch.Utils.Constants;
 import scripts.BicHamAlch.Utils.Utils;
 import scripts.BicHamAlch.Utils.Variables;
@@ -18,13 +21,20 @@ public class LootChest extends Node {
 	public void execute() {
 		Variables.status = "Loot Chest";
 		
-		for (int i = 0; i < 4; i++){
-			if (Utils.hasKey(i)){
-				if (enterRoom(i)){
-					if (openChest(i)){
+		int key = -1;
+		int counter = 0;
+				
+		while (key == -1)
+		{
+			if (Utils.hasKey(counter))
+				key = counter;
+				
+			counter++;
+		}
+		
+		if (enterRoom(key)){
+			if (openChest(key)){
 						
-					}
-				}
 			}
 		}
 		
@@ -39,56 +49,87 @@ public class LootChest extends Node {
 	}
 
 	private boolean enterRoom(int i) {
+		General.println(" room");
 		
-		if (Utils.isInRoom()){
-			if (DynamicClicking.clickRSObject(Utils.getDoor(), "Open")){
-				Timing.waitCondition(new Condition(){
-
-					@Override
-					public boolean active() {
-						return !Utils.isInRoom();
-					}
-					
-				}, General.random(5500,  10000));
+		if (!Constants.ROOM_AREA[i].contains(Player.getPosition())){
+			
+			if (Utils.isInCrackRoom()){
+				
 			}
+			
+			
+			General.println("Not in desired room");
+			
+			RSObject door = Utils.getDoor(i);
+			
+			if (Constants.DOOR_TILE[i].distanceTo(Player.getPosition()) > 5){
+				if (WebWalking.walkTo(Constants.DOOR_TILE[i])){
+					Timing.waitCondition(new Condition() {
+
+						@Override
+						public boolean active() {
+							return door.isOnScreen();
+						}
+						
+					}, General.random(7500, 15000));
+				}
+			}
+
+			if (i == 0){
+				if (DynamicClicking.clickRSObject(door, "Squeeze-through")){
+					Timing.waitCondition(new Condition(){
+
+						@Override
+						public boolean active() {
+							return Utils.isInRoom();
+						}
+						
+					}, General.random(3500,7500));
+				}
+			} else {
+				if (DynamicClicking.clickRSObject(door, "Pick-lock")){
+					
+					AntiBan.generateTrackers(7500, false);
+					Timing.waitCondition(new Condition(){
+
+						@Override
+						public boolean active() {
+							return Utils.isInRoom();
+						}
+						
+					}, General.random(30000, 45999));
+					
+					General.println("ABC sleep: " + AntiBan.getReactionTime());
+					AntiBan.sleepReactionTime();
+				}
+			}
+
 		}
 		
-		RSObject door = Utils.getDoor(i);
-		
-		if (!door.isClickable()){
-			if (WebWalking.walkTo(Constants.DOOR_AREA[i].getRandomTile())){
-				Timing.waitCondition(new Condition() {
+		return true;
+	}
 
-					@Override
-					public boolean active() {
-						return door.isClickable();
-					}
-					
-				}, General.random(7500, 15000));
-			}
+	private boolean openChest(int i) {
+		
+		RSObject chest = Utils.getChest(i);
+		
+		while (chest == null){
+			chest = Utils.getChest(i);
+			General.sleep(100, 150);
 		}
 		
-		if (DynamicClicking.clickRSObject(door, "Pick-lock")){
+		if (DynamicClicking.clickRSObject(chest, "Open")){
 			Timing.waitCondition(new Condition(){
 
 				@Override
 				public boolean active() {
-					return Utils.isInRoom();
+					return Utils.getChest(i) == null;
 				}
 				
-			}, General.random(3500,7500));
+			}, General.random(2000, 4000));
 		}
 		
-		
-		return false;
-	}
-
-	private boolean openChest(int i) {
-		RSObject chest = Utils.getChest(i);
-		
-		if (DynamicClicking.clickRSObject(chest, "Open")){
-			
-		}
+		General.sleep(100,450);
 		
 		return false;
 	}

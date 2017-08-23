@@ -4,7 +4,7 @@ import org.tribot.api.General;
 import org.tribot.api.Timing;
 import org.tribot.api.types.generic.Condition;
 import org.tribot.api2007.Banking;
-import org.tribot.api2007.WebWalking;
+import org.tribot.api2007.Walking;
 
 import scripts.BicMiner.Node;
 import scripts.BicMiner.Utils.Constants;
@@ -35,7 +35,7 @@ public class Bank extends Node {
 		
 		if (!Utils.getChest().isOnScreen()){
 			
-			if (WebWalking.walkTo(Constants.BANK_AREA.getRandomTile())){
+			if (Walking.walkTo(Constants.BANK_AREA.getRandomTile())){
 				
 				Timing.waitCondition(new Condition(){
 
@@ -56,20 +56,11 @@ public class Bank extends Node {
 		if (!Banking.isBankScreenOpen()){
 			
 			if (Banking.openBank()){
-				
-				Timing.waitCondition(new Condition(){
-	
-					@Override
-					public boolean active() {
-						General.sleep(100,150);
-						return Banking.isBankScreenOpen();
-					}
-					
-				}, General.random(1500, 3500));
+				return true;
 			}
 		}
 		
-		return true;
+		return false;
 	}
 	
 	private boolean deposit(){

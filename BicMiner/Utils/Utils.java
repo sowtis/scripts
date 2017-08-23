@@ -1,5 +1,6 @@
 package scripts.BicMiner.Utils;
 
+import scripts.BicHamAlch.Utils.Variables;
 import scripts.BicMiner.Utils.Constants;
 
 import org.tribot.api.General;
@@ -199,10 +200,14 @@ public class Utils {
 	}
 	
 	public static boolean isMining(){
-		if (Player.getAnimation() == Constants.MINING_ANIMATION || Variables.isMining == true){
-			Variables.isMining = true;
+		
+		if (Player.getAnimation() == Constants.MINING_ANIMATION){
+			Variables.mineTimer = System.currentTimeMillis() + 1650;
 			return true;
 		}
+		
+		if (Variables.mineTimer > System.currentTimeMillis())
+			return true;
 		
 		return false;
 	}

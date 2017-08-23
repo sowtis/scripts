@@ -19,30 +19,21 @@ public class Mine extends Node {
 	public void execute() {
 		
 		Variables.status = "Mining";
-		long mineTimer;
 		
+		if (!Utils.isMining()){
+			mineOre();
+		}
+
 		if (Utils.isMining()){
-			
+
 			AntiBan.generateTrackers(6500, false);
 			
-			mineTimer = System.currentTimeMillis() + 1650;
-			
-			while (mineTimer > System.currentTimeMillis()){
-				if (Player.getAnimation() == 6752)
-					mineTimer = System.currentTimeMillis() + 1650;
-				
+			while (Utils.isMining()){
 				General.sleep(100,150);
 				AntiBan.timedActions();
 			}
-			
-			Variables.isMining = false;
-			
 			General.println("ABC sleep: " + AntiBan.getReactionTime());;
 			AntiBan.sleepReactionTime();
-		}
-		
-		if (!Utils.inventoryFull()){
-			mineOre();
 		}
 		
 	}
@@ -74,7 +65,7 @@ public class Mine extends Node {
 						return Player.getAnimation() == 6752;
 					}
 					
-				}, General.random(1200, 2300));
+				}, General.random(6500, 10000));
 			}
 		}
 		
@@ -85,22 +76,18 @@ public class Mine extends Node {
 		General.println("Cam Handler");
 		if (Utils.getOreDirection(oreVein) == "north" && Utils.getCamDirection() != "south"){
 			Utils.turnCam("s");
-			General.sleep(550, 1250);
 		}
 
 		if (Utils.getOreDirection(oreVein) == "east" && Utils.getCamDirection() != "west"){
 			Utils.turnCam("w");
-			General.sleep(550, 1250);
 		}
 		
 		if (Utils.getOreDirection(oreVein) == "south" && Utils.getCamDirection() != "north"){
 			Utils.turnCam("n");
-			General.sleep(550, 1250);
 		}
 		
 		if (Utils.getOreDirection(oreVein) == "west" && Utils.getCamDirection() != "east"){
 			Utils.turnCam("e");
-			General.sleep(550, 1250);
 		}
 		
 	}

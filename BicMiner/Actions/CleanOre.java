@@ -7,7 +7,7 @@ import org.tribot.api.types.generic.Condition;
 import org.tribot.api2007.Inventory;
 import org.tribot.api2007.Objects;
 import org.tribot.api2007.Player;
-import org.tribot.api2007.WebWalking;
+import org.tribot.api2007.Walking;
 import org.tribot.api2007.types.RSObject;
 
 import scripts.BicMiner.Node;
@@ -24,13 +24,17 @@ public class CleanOre extends Node {
 		
 		RSObject hopper = Utils.getHopper();
 		
+		if (fillHopper(hopper)){
 			
-		if (fillHopper(hopper)){	
-			
-			while (Variables.lastMessage == "dirty"){
+			while (Variables.lastMessage == ""){
 				
 				if (Utils.strutsBroken() > 1){
-					fixStrut();
+					if (Utils.hasHammer()){
+						fixStrut();
+					}
+					getHammer();
+				} else {
+					walkToSack();
 				}
 			}
 			
@@ -58,36 +62,32 @@ public class CleanOre extends Node {
 							return !Utils.hasDirt();
 						}
 						
-					}, General.random(3500, 6000));
-					
-					Variables.lastMessage = "dirty";
-					General.println("Hopper Filled");
-					
+					}, General.random(3000, 4000));
 				}
-			
 		}
 		
 		return true;
 	}
 	
 	private void getHammer() {
+		
 		RSObject[] crate = Objects.find(15, Constants.CRATE_ID);
 		
-		if (!crate[0].isOnScreen()){
-			if (WebWalking.walkTo(crate[0].getPosition())){
+		if (!crate[0].isClickable()){
+			if (Walking.walkTo(crate[0].getPosition())){
 				Timing.waitCondition(new Condition(){
 
 					@Override
 					public boolean active() {
 						General.sleep(100,150);
-						return crate[0].isOnScreen();
+						return crate[0].isClickable();
 					}
 					
 				}, General.random(3200, 4500));
 			}
 		}
 		
-		if (DynamicClicking.clickRSObject(crate[0], "Open")){
+		if (DynamicClicking.clickRSObject(crate[0], "Search")){
 			Timing.waitCondition(new Condition(){
 
 				@Override
@@ -104,25 +104,21 @@ public class CleanOre extends Node {
 		
 		RSObject strut = Utils.getStrut();
 		
-		if (!Utils.hasHammer()){
-			getHammer();
-		}
-		
-		if (!strut.isOnScreen()){
-			if (WebWalking.walkTo(Constants.STRUT_AREA.getRandomTile())){
+		if (!strut.isClickable()){
+			if (Walking.walkTo(Constants.STRUT_AREA.getRandomTile())){
 				Timing.waitCondition(new Condition(){
 
 					@Override
 					public boolean active() {
 						General.sleep(100,150);
-						return strut.isOnScreen();
+						return strut.isClickable();
 					}
 					
 				}, General.random(3500, 6500));
 			}
 		}
 		
-		if (DynamicClicking.clickRSObject(strut, "Repair")){
+		if (DynamicClicking.clickRSObject(strut, "Hammer")){
 			Timing.waitCondition(new Condition(){
 
 				@Override
@@ -154,25 +150,12 @@ public class CleanOre extends Node {
 		RSObject sack = Utils.getSack();
 			
 		if (!sack.isOnScreen()){
-				
-			if (WebWalking.walkTo(sack.getPosition())){
+				if (walkToSack()){
 					
-				if (Utils.hasHammer())
-					Inventory.drop(2347);
-					
-				Timing.waitCondition(new Condition(){
-
-					@Override
-					public boolean active() {
-						General.sleep(100,150);
-						return sack.isOnScreen();
-					}
-						
-				}, General.random(3500, 6500));
-			}
+				}
 		}
 			
-		if (DynamicClicking.clickRSObject(sack, "Empty")){
+		if (DynamicClicking.clickRSObject(sack, "Search")){
 				
 			Timing.waitCondition(new Condition(){
 
@@ -186,6 +169,32 @@ public class CleanOre extends Node {
 		}
 		
 		Variables.lastMessage = "";
+		
+		return true;
+	}
+
+	private boolean walkToSack() {
+		
+		RSObject sack = Utils.getSack();
+		
+		if (Utils.hasHammer())
+			Inventory.drop(2347);
+		
+		if (!sack.isOnScreen()){
+			
+			if (Walking.walkTo(sack.getPosition())){
+				p
+				Timing.waitCondition(new Condition(){
+
+					@Override
+					public boolean active() {
+						General.sleep(100,150);
+						return sack.isOnScreen();
+					}
+						
+				}, General.random(3500, 6500));
+			}
+		}
 		
 		return true;
 	}

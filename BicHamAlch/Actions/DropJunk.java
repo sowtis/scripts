@@ -21,13 +21,13 @@ public class DropJunk extends Node {
 
 	@Override
 	public boolean validate() {
-		return (Utils.emptySpaces() < 4 || Utils.isStunned()) && Utils.hasJunk();
+		return (Utils.emptySpaces() < 4 || Utils.isStunned() || !Utils.isInPickpocketArea()) && Utils.hasJunk();
 	}
 	
 	private static boolean dropItem(){
 		for (RSItem item : Inventory.getAll()){
 			for (int i = 0; i < Constants.JUNK.length; i++){
-				if (item.name == Constants.JUNK[i]){
+				if (item.getID() == Constants.JUNK[i]){
 					Inventory.drop(item);
 				}
 			}
