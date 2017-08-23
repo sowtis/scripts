@@ -4,6 +4,7 @@ import org.tribot.api.DynamicClicking;
 import org.tribot.api.General;
 import org.tribot.api.Timing;
 import org.tribot.api.types.generic.Condition;
+import org.tribot.api2007.Objects;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.Walking;
 import org.tribot.api2007.WebWalking;
@@ -34,6 +35,7 @@ public class LootChest extends Node {
 		
 		if (enterRoom(key)){
 			if (openChest(key)){
+				General.sleep(200,500);
 						
 			}
 		}
@@ -49,12 +51,24 @@ public class LootChest extends Node {
 	}
 
 	private boolean enterRoom(int i) {
-		General.println(" room");
 		
 		if (!Constants.ROOM_AREA[i].contains(Player.getPosition())){
 			
 			if (Utils.isInCrackRoom()){
+				RSObject[] crack = Objects.findNearest(5, Constants.DOORS[0]);
 				
+				if (DynamicClicking.clickRSObject(crack[0], "Squeeze-through")){
+					Timing.waitCondition(new Condition(){
+
+						@Override
+						public boolean active() {
+							return !Utils.isInRoom();
+						}
+						
+					}, General.random(3500, 5500));
+					
+					return true;
+				}
 			}
 			
 			
@@ -115,7 +129,6 @@ public class LootChest extends Node {
 		
 		while (chest == null){
 			chest = Utils.getChest(i);
-			General.sleep(100, 150);
 		}
 		
 		if (DynamicClicking.clickRSObject(chest, "Open")){
@@ -129,7 +142,6 @@ public class LootChest extends Node {
 			}, General.random(2000, 4000));
 		}
 		
-		General.sleep(100,450);
 		
 		return false;
 	}

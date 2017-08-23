@@ -6,6 +6,7 @@ import org.tribot.api.Timing;
 import org.tribot.api.types.generic.Condition;
 import org.tribot.api2007.Inventory;
 import org.tribot.api2007.Objects;
+import org.tribot.api2007.PathFinding;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.Walking;
 import org.tribot.api2007.types.RSObject;
@@ -22,25 +23,91 @@ public class CleanOre extends Node {
 		
 		Variables.status = "Cleaning Dirt";
 		
-		RSObject hopper = Utils.getHopper();
-		
-		if (fillHopper(hopper)){
+		if (fillHopper()){
 			
-			while (Variables.lastMessage == ""){
+			Variables.path = PathFinding.generatePath(Player.getPosition(), Constants.SACK_AREA.getRandomTile(), false);
+			
+			while (Variables.lastMessage != "ready"){
 				
-				if (Utils.strutsBroken() > 1){
+				// Attempts to walk to sack to wait for ore
+				if (!Walking.walkPath(Variables.path, new Condition(){
+
+					@Override
+					public boolean active() {
+						// Stops if both struts are broken
+						return Utils.strutsBroken() > 1;
+					}
+					
+				}, General.random(250,750))){
+					
+					General.println("Failed to walk, struts broken");
+					
+					// attempts to fix struts
 					if (Utils.hasHammer()){
 						fixStrut();
+					} else {
+						getHammer();
 					}
-					getHammer();
-				} else {
-					walkToSack();
 				}
 			}
-			
-			emptySack();
 		}
 		
+	}
+
+	private void fixStrut() {
+		RSObject strut = Utils.getStrut();
+		
+		if (strut.isClickable()){
+			if (DynamicClicking.clickRSObject(strut, "Hammer")){
+				Timing.waitCondition(new Condition(){
+
+					@Override
+					public boolean active() {
+						return !Player.isMoving() && Player.getAnimation() == -1;
+					}
+					
+				}, General.random(5500, 9950));
+			}
+		} else {
+			Walking.walkTo(strut.getPosition());
+		}
+	}
+
+	private void getHammer() {
+		RSObject crate = Utils.getCrate();
+		
+		if (crate.isClickable()){
+			if (DynamicClicking.clickRSObject(crate, "Search")){
+				Timing.waitCondition(new Condition(){
+
+					@Override
+					public boolean active() {
+						return Utils.hasHammer();
+					}
+					
+				}, General.random(3500, 7500));
+			}
+		} else {
+			Walking.walkTo(crate.getPosition());
+		}
+	}
+
+	private boolean fillHopper() {
+		
+		if (DynamicClicking.clickRSObject(Utils.getHopper(), "Deposit")){
+			Timing.waitCondition(new Condition(){
+
+				@Override
+				public boolean active() {
+					return !Utils.hasDirt();
+				}
+				
+			}, General.random(3500, 6250));
+			
+			return true;
+		}
+		
+		return false;
 	}
 
 	@Override
@@ -48,154 +115,4 @@ public class CleanOre extends Node {
 		return Utils.isNearHopper() && Utils.hasDirt();
 	}
 	
-	private boolean fillHopper(RSObject hopper){
-		
-		if (Utils.hasDirt()){
-				
-				if (DynamicClicking.clickRSObject(Utils.getHopper(), "Deposit")){
-					
-					Timing.waitCondition(new Condition(){
-
-						@Override
-						public boolean active() {
-							General.sleep(100,150);
-							return !Utils.hasDirt();
-						}
-						
-					}, General.random(3000, 4000));
-				}
-		}
-		
-		return true;
-	}
-	
-	private void getHammer() {
-		
-		RSObject[] crate = Objects.find(15, Constants.CRATE_ID);
-		
-		if (!crate[0].isClickable()){
-			if (Walking.walkTo(crate[0].getPosition())){
-				Timing.waitCondition(new Condition(){
-
-					@Override
-					public boolean active() {
-						General.sleep(100,150);
-						return crate[0].isClickable();
-					}
-					
-				}, General.random(3200, 4500));
-			}
-		}
-		
-		if (DynamicClicking.clickRSObject(crate[0], "Search")){
-			Timing.waitCondition(new Condition(){
-
-				@Override
-				public boolean active() {
-					General.sleep(100,150);
-					return Utils.hasHammer();
-				}
-				
-			}, General.random(2300, 4000));
-		}
-	}
-	
-	private void fixStrut() {
-		
-		RSObject strut = Utils.getStrut();
-		
-		if (!strut.isClickable()){
-			if (Walking.walkTo(Constants.STRUT_AREA.getRandomTile())){
-				Timing.waitCondition(new Condition(){
-
-					@Override
-					public boolean active() {
-						General.sleep(100,150);
-						return strut.isClickable();
-					}
-					
-				}, General.random(3500, 6500));
-			}
-		}
-		
-		if (DynamicClicking.clickRSObject(strut, "Hammer")){
-			Timing.waitCondition(new Condition(){
-
-				@Override
-				public boolean active() {
-					General.sleep(100,150);
-					return Player.getAnimation() == Constants.HAMMER_ANIM;
-				}
-				
-			}, General.random(3500, 7500));
-			
-			Timing.waitCondition(new Condition() {
-
-				@Override
-				public boolean active() {
-					General.sleep(100,150);
-					return Player.getAnimation() == -1 && !Player.isMoving();
-				}
-				
-			}, General.random(3500, 7500));
-		}
-		
-		if (Utils.getStrut() != null)
-			fixStrut();
-		
-	}
-	
-	private boolean emptySack(){
-		
-		RSObject sack = Utils.getSack();
-			
-		if (!sack.isOnScreen()){
-				if (walkToSack()){
-					
-				}
-		}
-			
-		if (DynamicClicking.clickRSObject(sack, "Search")){
-				
-			Timing.waitCondition(new Condition(){
-
-				@Override
-					public boolean active() {
-					General.sleep(100,150);
-					return Utils.emptySpaces() < 9;
-				}
-					
-			}, General.random(3500, 6500));
-		}
-		
-		Variables.lastMessage = "";
-		
-		return true;
-	}
-
-	private boolean walkToSack() {
-		
-		RSObject sack = Utils.getSack();
-		
-		if (Utils.hasHammer())
-			Inventory.drop(2347);
-		
-		if (!sack.isOnScreen()){
-			
-			if (Walking.walkTo(sack.getPosition())){
-				p
-				Timing.waitCondition(new Condition(){
-
-					@Override
-					public boolean active() {
-						General.sleep(100,150);
-						return sack.isOnScreen();
-					}
-						
-				}, General.random(3500, 6500));
-			}
-		}
-		
-		return true;
-	}
 }

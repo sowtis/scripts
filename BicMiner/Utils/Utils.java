@@ -1,6 +1,6 @@
 package scripts.BicMiner.Utils;
 
-import scripts.BicHamAlch.Utils.Variables;
+import scripts.BicMiner.Utils.Variables;
 import scripts.BicMiner.Utils.Constants;
 
 import org.tribot.api.General;
@@ -9,6 +9,7 @@ import org.tribot.api2007.Inventory;
 import org.tribot.api2007.Objects;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.types.RSObject;
+import org.tribot.api2007.types.RSTile;
 
 public class Utils {
 	
@@ -77,8 +78,10 @@ public class Utils {
 		RSObject[] rockfall = Objects.find(6, Constants.ROCK);
 		
 		for (int i =0; i < rockfall.length; i++){
-			if (Constants.ROCK_AREA.contains(rockfall[i].getPosition()))
-				return rockfall[i];
+			for (RSTile tile : Variables.path){
+				if (rockfall[i].getPosition().equals(tile))
+					return rockfall[i];
+			}
 		}
 		
 		return null;
@@ -101,6 +104,15 @@ public class Utils {
 			if (Constants.MINE_AREA[0].contains(oreVein[i].getPosition()))
 				return oreVein[i];
 		}
+		
+		return null;
+	}
+	
+	public static RSObject getCrate(){
+		RSObject[] crates = Objects.findNearest(15, Constants.CRATE_ID);
+		
+		if (crates.length > 0)
+			return crates[0];
 		
 		return null;
 	}
@@ -178,17 +190,21 @@ public class Utils {
 	}
 
 	public static boolean rockInWay(){
-		RSObject[] rockfall = Objects.find(6, Constants.ROCK);
+		RSObject[] rockfall = Objects.find(8, Constants.ROCK);
 		
-		int rocks = 0;
-		
-		for (int i =0; i < rockfall.length; i++){
-			if (Constants.ROCK_AREA.contains(rockfall[i].getPosition()))
-				rocks++;
+		for (int i = 0; i < rockfall.length; i++){
+			for (RSTile tile : Variables.path){
+				if (rockfall[i].getPosition().equals(tile)){
+					
+					// destination = last tile of path
+					RSTile destination = Variables.path[Variables.path.length-1];
+					
+					if (rockfall[i].getPosition().distanceToDouble(destination) < Player.getPosition().distanceToDouble(destination))
+					return true;
+					
+				}
+			}
 		}
-		// If 2 rocks are in ROCK_AREA, then a rock is in the way and must be mined
-		if (rocks > 1)
-			return true;
 		
 		return false;
 	}
