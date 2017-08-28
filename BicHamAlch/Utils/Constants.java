@@ -25,12 +25,12 @@ public class Constants {
 		{	1205, 1739, 1349, 199, 1734, 4306, 886, 1203, 697, 1353, 590, 882,
 			1349, 1269, 1129, 2138, 4302, 4304, 4298, 4300, 4310, 4308, 1207,
 			1625, 321, 1734, 1351, 453, 314, 688, 1265, 1511, 946, 1627, 1267,
-			203};
+			203, 1733, 440, 686};
 	
 	// TILES + AREAS
 	
 	public static final RSArea PICKPOCKET_AREA =
-			new RSArea(new RSTile(2567, 5188, 0), new RSTile(2566, 5190, 0));
+			new RSArea(new RSTile(2567, 5188, 0), new RSTile(2566, 5189, 0));
 	
 	public static final RSArea[] ROOM_AREA = 
 		{	new RSArea(new RSTile(2567, 5194, 0), new RSTile(2570, 5190, 0)),
@@ -48,7 +48,7 @@ public class Constants {
 			new RSArea(new RSTile(2566, 5203, 0), new RSTile(2577, 2573, 0));
 	
 	public static final RSArea BANK_AREA =
-			new RSArea(new RSTile(0,0,0), new RSTile(0,0,0));
+			new RSArea(new RSTile(3207, 3220, 2), new RSTile(3210, 3218, 2));
 	
 	public static final RSArea CASTLE_AREA = 
 			new RSArea(new RSTile(0,0,0), new RSTile(0,0,0));

@@ -4,9 +4,12 @@ import org.tribot.api.DynamicClicking;
 import org.tribot.api.General;
 import org.tribot.api.Timing;
 import org.tribot.api.types.generic.Condition;
+import org.tribot.api2007.GameTab;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.Walking;
 import org.tribot.api2007.WebWalking;
+import org.tribot.api2007.GameTab.TABS;
+import org.tribot.api2007.Objects;
 import org.tribot.api2007.types.RSObject;
 
 import scripts.BicHamAlch.Node;
@@ -20,6 +23,21 @@ public class LootChest extends Node {
 	@Override
 	public void execute() {
 		Variables.status = "Loot Chest";
+		
+		if (GameTab.getOpen().equals(TABS.MAGIC)){
+			if (GameTab.open(TABS.INVENTORY)){
+				Timing.waitCondition(new Condition(){
+
+					@Override
+					public boolean active() {
+						return GameTab.getOpen().equals(TABS.INVENTORY);
+					}
+					
+				}, General.random(1500,3500));
+				
+				General.sleep(70,300);
+			}
+		}
 		
 		int key = -1;
 		int counter = 0;
@@ -49,33 +67,32 @@ public class LootChest extends Node {
 	}
 
 	private boolean enterRoom(int i) {
-		General.println(" room");
 		
+		// If not in desired room
 		if (!Constants.ROOM_AREA[i].contains(Player.getPosition())){
 			
-			if (Utils.isInCrackRoom()){
-				
+			
+			if (Utils.isInRoom()){
+				exitRoom();
 			}
-			
-			
-			General.println("Not in desired room");
-			
+
 			RSObject door = Utils.getDoor(i);
 			
-			if (Constants.DOOR_TILE[i].distanceTo(Player.getPosition()) > 5){
+			if (!door.isClickable()){
 				if (WebWalking.walkTo(Constants.DOOR_TILE[i])){
-					Timing.waitCondition(new Condition() {
+					Timing.waitCondition(new Condition(){
 
 						@Override
 						public boolean active() {
-							return door.isOnScreen();
+							return door.isClickable();
 						}
 						
-					}, General.random(7500, 15000));
+					}, General.random(8800,15000));
 				}
 			}
 
 			if (i == 0){
+				// If bronze key, squeeze-through crack
 				if (DynamicClicking.clickRSObject(door, "Squeeze-through")){
 					Timing.waitCondition(new Condition(){
 
@@ -85,25 +102,70 @@ public class LootChest extends Node {
 						}
 						
 					}, General.random(3500,7500));
+					General.sleep(100,750);
 				}
 			} else {
-				if (DynamicClicking.clickRSObject(door, "Pick-lock")){
+				// Else pick-lock door
+				General.println("Picking lock");
+				
+				while (!DynamicClicking.clickRSObject(door, "Pick-lock")){
+					General.sleep(100,150);
+				}
+				
+				AntiBan.generateTrackers(6500, false);
+				Timing.waitCondition(new Condition(){
+
+					@Override
+					public boolean active() {
+						return Utils.isInRoom();
+					}
 					
-					AntiBan.generateTrackers(7500, false);
+				}, General.random(30000, 45999));
+				
+				General.println("ABC sleep: " + AntiBan.getReactionTime());
+				AntiBan.sleepReactionTime();
+				
+//				if (DynamicClicking.clickRSObject(door, "Pick-lock")){
+//					
+
+//				}
+			}
+
+		}
+		
+		return true;
+	}
+	
+	private boolean exitRoom(){
+		if (Utils.isInCrackRoom()){
+			RSObject[] crack = Objects.findNearest(5, Constants.DOORS[0]);
+			
+			if (crack.length > 1){
+				if (DynamicClicking.clickRSObject(crack[1], "Squeeze-through")){
 					Timing.waitCondition(new Condition(){
 
 						@Override
 						public boolean active() {
-							return Utils.isInRoom();
+							return !Utils.isInCrackRoom();
 						}
 						
-					}, General.random(30000, 45999));
+					}, General.random(3500,7500));
 					
-					General.println("ABC sleep: " + AntiBan.getReactionTime());
-					AntiBan.sleepReactionTime();
+
+					General.sleep(350,1000);
 				}
 			}
+		} else {
+			if (DynamicClicking.clickRSObject(Utils.getDoor(), "Open")){
+				Timing.waitCondition(new Condition(){
 
+					@Override
+					public boolean active() {
+						return !Utils.isInRoom();
+					}
+					
+				}, General.random(3500,7500));
+			}
 		}
 		
 		return true;

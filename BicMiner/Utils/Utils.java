@@ -1,6 +1,6 @@
 package scripts.BicMiner.Utils;
 
-import scripts.BicHamAlch.Utils.Variables;
+import scripts.BicMiner.Utils.Variables;
 import scripts.BicMiner.Utils.Constants;
 
 import org.tribot.api.General;
@@ -9,6 +9,7 @@ import org.tribot.api2007.Inventory;
 import org.tribot.api2007.Objects;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.types.RSObject;
+import org.tribot.api2007.types.RSTile;
 
 public class Utils {
 	
@@ -76,9 +77,16 @@ public class Utils {
 	public static RSObject getRock() {
 		RSObject[] rockfall = Objects.find(6, Constants.ROCK);
 		
-		for (int i =0; i < rockfall.length; i++){
-			if (Constants.ROCK_AREA.contains(rockfall[i].getPosition()))
-				return rockfall[i];
+		if (rockfall.length > 0){
+			for (RSTile tile : Variables.path){
+				for (int i = 0; i < rockfall.length; i++){
+					if (tile.equals(rockfall[i].getPosition())){
+						
+						return rockfall[i];
+						
+					}
+				}
+			}
 		}
 		
 		return null;
@@ -180,16 +188,22 @@ public class Utils {
 	public static boolean rockInWay(){
 		RSObject[] rockfall = Objects.find(6, Constants.ROCK);
 		
-		int rocks = 0;
-		
-		for (int i =0; i < rockfall.length; i++){
-			if (Constants.ROCK_AREA.contains(rockfall[i].getPosition()))
-				rocks++;
+		if (rockfall.length > 0){
+			for (RSTile tile : Variables.path){
+				for (int i = 0; i < rockfall.length; i++){
+					if (tile.equals(rockfall[i].getPosition())){
+						
+						RSTile destination = Variables.path[Variables.path.length-1];
+						
+						if (rockfall[i].getPosition().distanceToDouble(destination) < Player.getPosition().distanceToDouble(destination)){
+							return true;
+						}
+						
+					}
+				}
+			}
 		}
-		// If 2 rocks are in ROCK_AREA, then a rock is in the way and must be mined
-		if (rocks > 1)
-			return true;
-		
+				
 		return false;
 	}
 

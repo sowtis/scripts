@@ -183,7 +183,7 @@ public class CleanOre extends Node {
 		if (!sack.isOnScreen()){
 			
 			if (Walking.walkTo(sack.getPosition())){
-				p
+				
 				Timing.waitCondition(new Condition(){
 
 					@Override

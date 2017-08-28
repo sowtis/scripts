@@ -3,6 +3,7 @@ package scripts.BicMiner;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,7 +14,9 @@ import org.tribot.api.Timing;
 import org.tribot.api.util.abc.ABCUtil;
 import org.tribot.api2007.Objects;
 import org.tribot.api2007.Player;
+import org.tribot.api2007.Projection;
 import org.tribot.api2007.types.RSObject;
+import org.tribot.api2007.types.RSTile;
 import org.tribot.script.Script;
 import org.tribot.script.ScriptManifest;
 import org.tribot.script.interfaces.MessageListening07;
@@ -75,6 +78,8 @@ public class BicMiner extends Script implements Painting, MessageListening07 {
 	public void onPaint(Graphics g) {
 		long timeRan = System.currentTimeMillis() - startTime;
 		
+		Graphics2D g2d = (Graphics2D) g;
+		
 		Point pModel = Player.getRSPlayer().getModel().getCentrePoint();
 		RSObject[] struts = Objects.findNearest(15, Constants.STRUT_ID);
 		
@@ -92,7 +97,12 @@ public class BicMiner extends Script implements Painting, MessageListening07 {
 	    for (int i = 0; i < struts.length; i++){
 	    	g.drawString("BROKEN", (int)struts[i].getModel().getCentrePoint().getX(), (int)struts[i].getModel().getCentrePoint().getY());
 	    }
-	       
+	    
+	    if (Variables.path.length > 0){
+	    	for (RSTile tile : Variables.path){
+	    		g2d.drawPolygon(Projection.getTileBoundsPoly(tile, 0));
+	    	}
+	    }
 
 	}
 

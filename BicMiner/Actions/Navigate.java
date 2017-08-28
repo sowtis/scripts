@@ -4,8 +4,12 @@ import org.tribot.api.DynamicClicking;
 import org.tribot.api.General;
 import org.tribot.api.Timing;
 import org.tribot.api.types.generic.Condition;
+import org.tribot.api2007.PathFinding;
+import org.tribot.api2007.Player;
+import org.tribot.api2007.Walking;
 import org.tribot.api2007.WebWalking;
 import org.tribot.api2007.types.RSObject;
+import org.tribot.api2007.types.RSTile;
 
 import scripts.BicMiner.Node;
 import scripts.BicMiner.Utils.Constants;
@@ -19,28 +23,53 @@ public class Navigate extends Node {
 		
 		Variables.status = "Walking";
 		
-		if (Utils.isInMineArea()){
-			if (Utils.getCamDirection() != "north"){
-				Utils.turnCam("n");
-			}
-			if (walkRock()){
-				if (breakRock()){
-					if (walkHopperArea()){
-						
-					}
-				}
-			}
+		
+		Variables.path = PathFinding.generatePath(Player.getPosition(), Constants.HOPPER_AREA.getRandomTile(), false);
+		
+		if (Utils.isInMineArea())
+			Variables.path = PathFinding.generatePath(Player.getPosition(), Constants.HOPPER_AREA.getRandomTile(), false);
+		
+		for (RSTile tile : Variables.path){
+			General.println(tile);
 		}
-			
-		if (Utils.isNearChest()){
-			if (walkRock()){
-				if (breakRock()){
-					if (walkMineArea()){
-						
-					}
-				}
-			}
-		}
+		
+		if (Variables.path != null)
+			Walking.walkPath(Variables.path);
+		
+//		if (Walking.walkPath(Variables.path, new Condition(){
+//
+//			@Override
+//			public boolean active() {
+//				return Utils.rockInWay();
+//			}
+//			
+//		}, General.random(250,750)));
+		
+		
+		
+//		
+//		if (Utils.isInMineArea()){
+//			if (Utils.getCamDirection() != "north"){
+//				Utils.turnCam("n");
+//			}
+//			if (walkRock()){
+//				if (breakRock()){
+//					if (walkHopperArea()){
+//						
+//					}
+//				}
+//			}
+//		}
+//			
+//		if (Utils.isNearChest()){
+//			if (walkRock()){
+//				if (breakRock()){
+//					if (walkMineArea()){
+//						
+//					}
+//				}
+//			}
+//		}
 					
 	}
 

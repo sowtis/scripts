@@ -35,13 +35,13 @@ public class Pickpocket extends Node {
 
 	@Override
 	public boolean validate() {
-		return Utils.hasFood() && Utils.emptySpaces() > 3 && !Utils.hasJewelry() &&
+		return Utils.hasFood() && Utils.emptySpaces() > 3 && !Utils.hasJewelry() && Utils.isInGameRoom() &&
 				(!Utils.hasKeys() || Utils.isInPickpocketArea());
 	}
 
 	private boolean pickpocket() {
 		if (DynamicClicking.clickRSNPC(Utils.getGuard(), "Pickpocket")){
-			General.sleep(90,250);
+			General.sleep(0,125);
 		}
 		
 		return false;

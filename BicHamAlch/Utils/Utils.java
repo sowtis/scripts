@@ -180,7 +180,7 @@ public class Utils {
 	public static boolean isStunned(){
 		
 		if (Variables.lastMessage == "stun"){
-			Variables.stunTimer = System.currentTimeMillis() + General.random(3150, 3950);
+			Variables.stunTimer = System.currentTimeMillis() + General.random(2850, 3650);
 			Variables.lastMessage = "";
 			return true;
 		}
