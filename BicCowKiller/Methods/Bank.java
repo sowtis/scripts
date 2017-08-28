@@ -109,6 +109,7 @@ public class Bank extends Node {
 
 	@Override
 	public boolean validate() {
+		// Inventory full, and hide tanning is off OR we have leather
 		return Inventory.isFull() && (!Vars.tanHide || Checks.hasLeather());
 	}
 

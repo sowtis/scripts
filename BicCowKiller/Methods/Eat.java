@@ -37,6 +37,7 @@ public class Eat extends Node {
 
 	@Override
 	public boolean validate() {
+		// We have food, and current HP less than ABC eat hp
 		return Checks.hasFood() && Checks.getHpPercent() < Vars.eatHp;
 	}
 

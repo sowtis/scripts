@@ -15,6 +15,6 @@ public class Constants {
 	// areas
 	public static RSArea cowArea = new RSArea(new RSTile(0,0,0), new RSTile(0,0,0));
 	public static RSArea tanArea = new RSArea(new RSTile(0,0,0), new RSTile(0,0,0));
+	public static RSArea bankArea = new RSArea(new RSTile(0,0,0), new RSTile(0,0,0));
 	
-
 }

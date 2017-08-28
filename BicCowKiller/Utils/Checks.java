@@ -22,7 +22,7 @@ public class Checks {
 		return Constants.tanArea.contains(Player.getPosition());
 	}
 	
-	// items
+	// inventory
 	public static boolean hasFood(){
 		return Inventory.find(Vars.foodId).length > 0;
 	}
@@ -46,6 +46,8 @@ public class Checks {
 		
 		return 0;
 	}
+	
+	// ground items
 
 	// interface
 	public static boolean tanShopOpen(){
