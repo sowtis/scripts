@@ -77,6 +77,7 @@ public class Utils {
 	public static RSObject getRock() {
 		RSObject[] rockfall = Objects.find(6, Constants.ROCK);
 		
+<<<<<<< HEAD
 		if (rockfall.length > 0){
 			for (RSTile tile : Variables.path){
 				for (int i = 0; i < rockfall.length; i++){
@@ -86,6 +87,12 @@ public class Utils {
 						
 					}
 				}
+=======
+		for (int i =0; i < rockfall.length; i++){
+			for (RSTile tile : Variables.path){
+				if (rockfall[i].getPosition().equals(tile))
+					return rockfall[i];
+>>>>>>> 9f4342b43e52ce520c1bd05fc59bbc1167e2b0aa
 			}
 		}
 		
@@ -109,6 +116,15 @@ public class Utils {
 			if (Constants.MINE_AREA[0].contains(oreVein[i].getPosition()))
 				return oreVein[i];
 		}
+		
+		return null;
+	}
+	
+	public static RSObject getCrate(){
+		RSObject[] crates = Objects.findNearest(15, Constants.CRATE_ID);
+		
+		if (crates.length > 0)
+			return crates[0];
 		
 		return null;
 	}
@@ -186,6 +202,7 @@ public class Utils {
 	}
 
 	public static boolean rockInWay(){
+<<<<<<< HEAD
 		RSObject[] rockfall = Objects.find(6, Constants.ROCK);
 		
 		if (rockfall.length > 0){
@@ -204,6 +221,24 @@ public class Utils {
 			}
 		}
 				
+=======
+		RSObject[] rockfall = Objects.find(8, Constants.ROCK);
+		
+		for (int i = 0; i < rockfall.length; i++){
+			for (RSTile tile : Variables.path){
+				if (rockfall[i].getPosition().equals(tile)){
+					
+					// destination = last tile of path
+					RSTile destination = Variables.path[Variables.path.length-1];
+					
+					if (rockfall[i].getPosition().distanceToDouble(destination) < Player.getPosition().distanceToDouble(destination))
+					return true;
+					
+				}
+			}
+		}
+		
+>>>>>>> 9f4342b43e52ce520c1bd05fc59bbc1167e2b0aa
 		return false;
 	}
 

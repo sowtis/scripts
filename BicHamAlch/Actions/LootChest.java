@@ -4,9 +4,12 @@ import org.tribot.api.DynamicClicking;
 import org.tribot.api.General;
 import org.tribot.api.Timing;
 import org.tribot.api.types.generic.Condition;
+<<<<<<< HEAD
 import org.tribot.api2007.GameTab;
+=======
+import org.tribot.api2007.Objects;
+>>>>>>> 9f4342b43e52ce520c1bd05fc59bbc1167e2b0aa
 import org.tribot.api2007.Player;
-import org.tribot.api2007.Walking;
 import org.tribot.api2007.WebWalking;
 import org.tribot.api2007.GameTab.TABS;
 import org.tribot.api2007.Objects;
@@ -52,6 +55,7 @@ public class LootChest extends Node {
 		
 		if (enterRoom(key)){
 			if (openChest(key)){
+				General.sleep(200,500);
 						
 			}
 		}
@@ -71,6 +75,28 @@ public class LootChest extends Node {
 		// If not in desired room
 		if (!Constants.ROOM_AREA[i].contains(Player.getPosition())){
 			
+<<<<<<< HEAD
+=======
+			if (Utils.isInCrackRoom()){
+				RSObject[] crack = Objects.findNearest(5, Constants.DOORS[0]);
+				
+				if (DynamicClicking.clickRSObject(crack[0], "Squeeze-through")){
+					Timing.waitCondition(new Condition(){
+
+						@Override
+						public boolean active() {
+							return !Utils.isInRoom();
+						}
+						
+					}, General.random(3500, 5500));
+					
+					return true;
+				}
+			}
+			
+			
+			General.println("Not in desired room");
+>>>>>>> 9f4342b43e52ce520c1bd05fc59bbc1167e2b0aa
 			
 			if (Utils.isInRoom()){
 				exitRoom();
@@ -177,7 +203,6 @@ public class LootChest extends Node {
 		
 		while (chest == null){
 			chest = Utils.getChest(i);
-			General.sleep(100, 150);
 		}
 		
 		if (DynamicClicking.clickRSObject(chest, "Open")){
@@ -191,7 +216,6 @@ public class LootChest extends Node {
 			}, General.random(2000, 4000));
 		}
 		
-		General.sleep(100,450);
 		
 		return false;
 	}

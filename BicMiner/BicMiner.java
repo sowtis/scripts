@@ -69,7 +69,7 @@ public class BicMiner extends Script implements Painting, MessageListening07 {
 	@Override
 	public void serverMessageReceived(String arg0) {
 		// TODO Auto-generate method sub
-		if (arg0.contains("Some ore is ready"))
+		if (arg0.contains("Some ore"))
 			 Variables.lastMessage = "ready";
 		
 	}
@@ -90,20 +90,33 @@ public class BicMiner extends Script implements Painting, MessageListening07 {
 	    g.drawString("Status: " + Variables.status, 279, 390);
 	    g.drawString("ABC: " + AntiBan.abcActions, 279, 405);
 	    
+	    g.setColor(Color.GREEN);
+	    
 	    if (Utils.isMining())
-	    	g.drawString("Mining", (int)pModel.getX()-15, (int)pModel.getY());
+	    	g2d.drawString("Mining", (int)pModel.getX()-15, (int)pModel.getY());
 	    
 	    
 	    for (int i = 0; i < struts.length; i++){
-	    	g.drawString("BROKEN", (int)struts[i].getModel().getCentrePoint().getX(), (int)struts[i].getModel().getCentrePoint().getY());
+	    	g.drawString("BROKEN", (int)struts[i].getModel().getCentrePoint().getX()-15, (int)struts[i].getModel().getCentrePoint().getY());
 	    }
 	    
+<<<<<<< HEAD
 	    if (Variables.path.length > 0){
 	    	for (RSTile tile : Variables.path){
 	    		g2d.drawPolygon(Projection.getTileBoundsPoly(tile, 0));
 	    	}
 	    }
 
+=======
+	    if (Variables.path.length > 0){                 
+	    	for(RSTile tile : Variables.path){            
+	    			if(tile.isOnScreen()){
+	    				g2d.draw(Projection.getTileBoundsPoly(tile, 0));
+	    			}
+	    	}
+	    }
+	    
+>>>>>>> 9f4342b43e52ce520c1bd05fc59bbc1167e2b0aa
 	}
 
 

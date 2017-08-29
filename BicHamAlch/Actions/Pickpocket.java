@@ -27,6 +27,7 @@ public class Pickpocket extends Node {
 		
 		if (!Utils.isStunned()){
 			pickpocket();
+			General.sleep(75, 200);
 		} else {
 			AntiBan.timedActions();
 		}
@@ -39,12 +40,18 @@ public class Pickpocket extends Node {
 				(!Utils.hasKeys() || Utils.isInPickpocketArea());
 	}
 
+<<<<<<< HEAD
 	private boolean pickpocket() {
 		if (DynamicClicking.clickRSNPC(Utils.getGuard(), "Pickpocket")){
 			General.sleep(0,125);
 		}
 		
 		return false;
+=======
+	private void pickpocket() {
+		DynamicClicking.clickRSNPC(Utils.getGuard(), "Pickpocket");
+			
+>>>>>>> 9f4342b43e52ce520c1bd05fc59bbc1167e2b0aa
 	}
 	
 	private boolean goToPickpocketArea(){

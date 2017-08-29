@@ -2,8 +2,11 @@ package scripts.BicHamAlch.Actions;
 
 import java.awt.event.KeyEvent;
 
+<<<<<<< HEAD
 import org.tribot.api.Clicking;
 import org.tribot.api.General;
+=======
+>>>>>>> 9f4342b43e52ce520c1bd05fc59bbc1167e2b0aa
 import org.tribot.api.input.Keyboard;
 import org.tribot.api2007.Inventory;
 import org.tribot.api2007.types.RSItem;
@@ -29,7 +32,12 @@ public class DropJunk extends Node {
 		return (Utils.emptySpaces() < 4 || Utils.isStunned() || !Utils.isInPickpocketArea()) && Utils.hasJunk();
 	}
 	
+<<<<<<< HEAD
 	private static boolean dropItems(){
+=======
+	private static boolean dropItem(){
+		
+>>>>>>> 9f4342b43e52ce520c1bd05fc59bbc1167e2b0aa
 		Keyboard.sendPress(KeyEvent.CHAR_UNDEFINED, KeyEvent.VK_SHIFT);
 		
 		for (RSItem item : Inventory.getAll()){
